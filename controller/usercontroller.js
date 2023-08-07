@@ -289,20 +289,16 @@ const resetPassword = async (req, res) => {
 const login = async (req, res) => {
   try {
     const data = req.body
-    const { email, password, otp } = data;
+    const { email, password } = data;
     if (!isValidBody(data)) return res.status(400).json({ status: 400, message: "Body can't be empty please enter some data" })
     if (!isValid(email)) return res.status(400).json({ status: 400, message: "Email is required" })
     if (!emailRegex.test(email)) return res.status(406).json({ status: 406, message: "Email Id is not valid" })
     if (!isValid(password)) return res.status(406).json({ status: 406, message: "password is required" })
     if (!passwordRegex.test(password)) return res.status(406).json({ status: 406, message: "Password is not valid" })
-    if (!isValid(otp)) return res.status(400).json({ status: 400, message: "Otp is required" })
 
     const user = await userDb.findOne({ email });
     if (!user) {
       return res.status(401).json({ status: 401, message: "Invalid email" });
-    }
-    if (user.otp !== otp) {
-      return res.status(401).json({ status: 401, message: "Invalid OTP" });
     }
     if (user.blockedStatus===true) {
       return res.status(401).json({ status: 401, message: "Your account has been blocked. Please contact the admin for assistance." });
@@ -314,7 +310,7 @@ const login = async (req, res) => {
     }
     const token = jwt.sign({ userId: user._id }, process.env.USER_SECRET_KEY);
     await user.save();
-
+console.log("user", user);
     return res.status(200).json({ status: 200, message: "Login successful", data: { user, token } });
   } catch (error) {
     console.error(error);
