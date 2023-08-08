@@ -2,5 +2,5 @@
 
 # Ignore node_modules directory
 node_modules/
-.vercel
+# .vercel
 .node_modules/
