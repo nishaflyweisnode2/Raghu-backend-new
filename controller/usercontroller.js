@@ -257,23 +257,12 @@ const signUpWithEmail = async (req, res, email, password, confirmPassword) => {
 
     await user.save();
 
-    // Send OTP via email using nodemailer
-    const mailOptions = {
-      from: 'princegap001@gmail.com',
-      to: email,
-      subject: 'OTP for Signup',
-      text: `Your OTP for signup is: ${otp}`
-    };
+    // Handle your email verification logic using your chosen method here
+    // For example, you can send a verification link to the user's email
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending OTP via email:', error);
-        res.status(500).json({ error: 'Failed to send OTP via email' });
-      } else {
-        console.log('OTP sent successfully via email:', info.response);
-        res.status(201).json({ status: 201, message: 'Signup successful', user });
-      }
-    });
+    // Proceed with user registration as necessary
+    res.status(201).json({ status: 201, message: "Signup successful", user });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create user' });
@@ -308,6 +297,7 @@ const signUpWithMobile = async (req, res, mobileNumber, password, confirmPasswor
     res.status(500).json({ error: 'Failed to create user' });
   }
 };
+
 
 
 //
