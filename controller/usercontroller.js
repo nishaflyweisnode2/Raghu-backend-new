@@ -119,6 +119,108 @@ function generateResetToken() {
 // };
 
 
+// const signup = async (req, res) => {
+//   const { email, mobileNumber, password, confirmPassword } = req.body;
+//   try {
+//     if (!isValidBody(req.body)) {
+//       return res.status(400).json({ status: 400, message: "Body can't be empty, please enter some data" });
+//     }
+//     if (isValid(email) && emailRegex.test(email)) {
+//       await signUpWithEmail(req, res, email, password, confirmPassword);
+//     } else if (isValid(mobileNumber) && mobileRegex.test(mobileNumber)) {
+//       await signUpWithMobile(req, res, mobileNumber, password, confirmPassword);
+//     } else {
+//       return res.status(406).json({ status: 406, message: "Invalid email or mobile number" });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Failed to create user' });
+//   }
+// };
+
+// const signUpWithEmail = async (req, res, email, password, confirmPassword) => {
+//   try {
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     const existingUser = await userDb.findOne({ email });
+//     if (existingUser) {
+//       return res.status(400).json({ status: 400, message: "Email already exists" });
+//     }
+
+//     const otp = generateOtp();
+//     const user = new userDb({
+//       email,
+//       password: hashedPassword,
+//       otp,
+//     });
+
+//     await user.save();
+
+//     // Send OTP via email using nodemailer
+//     const mailOptions = {
+//       from: 'princegap001@gmail.com',
+//       to: email,
+//       subject: 'OTP for Signup',
+//       text: `Your OTP for signup is: ${otp}`
+//     };
+
+//     transporter.sendMail(mailOptions, (error, info) => {
+//       if (error) {
+//         console.error('Error sending OTP via email:', error);
+//         res.status(500).json({ error: 'Failed to send OTP via email' });
+//       } else {
+//         console.log('OTP sent successfully via email:', info.response);
+//         res.status(201).json({ status: 201, message: 'Signup successful', user });
+//       }
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Failed to create user' });
+//   }
+// };
+
+// const signUpWithMobile = async (req, res, mobileNumber, password, confirmPassword) => {
+//   try {
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     const existingUser = await userDb.findOne({ mobileNumber });
+//     if (existingUser) {
+//       return res.status(400).json({ status: 400, message: "Mobile number already exists" });
+//     }
+
+//     const otp = generateOtp();
+//     const user = new userDb({
+//       mobileNumber,
+//       password: hashedPassword,
+//       otp,
+//     });
+
+//     await user.save();
+
+//     // Send OTP via SMS using Twilio
+//     // twilioClient.messages
+//     //   .create({
+//     //     body: `Your OTP for signup is: ${otp}`,
+//     //     from: '+15739833421',
+//     //     to: "+91" + mobileNumber,
+//     //     timeout: 60000,
+//     //   })
+//     //   .then((message) => {
+//     //     console.log(`SMS sent with SID: ${message.sid}`);
+//     //     res.status(201).json({ status: 201, message: "Signup successful", user });
+//     //   })
+//     //   .catch((error) => {
+//     //     console.error('Error sending SMS:', error);
+//     //     console.error('Twilio API response:', error.response.data);
+//     //     res.status(500).json({ error: 'Failed to send OTP via SMS' });
+//     //   });
+
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Failed to create user' });
+//   }
+// };
+
+
+//
 const signup = async (req, res) => {
   const { email, mobileNumber, password, confirmPassword } = req.body;
   try {
@@ -195,23 +297,11 @@ const signUpWithMobile = async (req, res, mobileNumber, password, confirmPasswor
 
     await user.save();
 
-    // Send OTP via SMS using Twilio
-    twilioClient.messages
-      .create({
-        body: `Your OTP for signup is: ${otp}`,
-        from: '+15739833421',
-        to: "+91" + mobileNumber,
-        timeout: 60000,
-      })
-      .then((message) => {
-        console.log(`SMS sent with SID: ${message.sid}`);
-        res.status(201).json({ status: 201, message: "Signup successful", user });
-      })
-      .catch((error) => {
-        console.error('Error sending SMS:', error);
-        console.error('Twilio API response:', error.response.data);
-        res.status(500).json({ error: 'Failed to send OTP via SMS' });
-      });
+    // You can implement your own mobile number verification logic here
+    // This could involve sending a verification code via SMS, using a different SMS service
+
+    // Proceed with user registration as necessary
+    res.status(201).json({ status: 201, message: "Signup successful", user });
 
   } catch (error) {
     console.error(error);
@@ -219,6 +309,8 @@ const signUpWithMobile = async (req, res, mobileNumber, password, confirmPasswor
   }
 };
 
+
+//
 const generateOtp = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
