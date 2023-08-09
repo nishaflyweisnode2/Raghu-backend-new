@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const { authenticateUser, authorizeUser, authorization, authenticateAdmin } = require("../middleware/auth");
-const { signup, verifyOTP, resendOTP, forgotPassword, resetPassword, login, updateProfile, getUserProfile } = require("../controller/usercontroller");
+const { signup, verifyOTP, resendOTP, forgotPassword, resetPassword, login, updateProfile, getUserProfile, updateUserProfile } = require("../controller/usercontroller");
 const {
     createCourse, getMyCourses, getOngoingCourses,
     saveCourse, getSavedCourses, enrollCourse, getCourseDetails, getFeaturedCourses, getPopularCourses, getCoursesByCategory,
@@ -60,6 +60,8 @@ router.post('/reset-password', resetPassword);
 router.post('/login', login)
 router.put('/update-user/:userId', authenticateUser, authorization, upload.single('profileImage'), updateProfile)
 router.get('/profile/:userId', authenticateUser, authorization, getUserProfile);
+router.put("/update-profile/:userId", authenticateUser, authorization, updateUserProfile);
+
 
 
 
